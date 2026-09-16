@@ -4,6 +4,8 @@ A single-file demo/training Kanban board for UOB's internal IT PMO, built as a s
 
 **Live demo:** https://jarrodlinst-commits.github.io/Project16Sept/
 
+![Screenshot of the UOB IT PMO Kanban board](./screenshot.png)
+
 ## Running it
 
 Just open `index.html` in a browser (double-click it, or run `open index.html` on macOS). There's no build/lint/test command — none exist in this project, and none are needed.
