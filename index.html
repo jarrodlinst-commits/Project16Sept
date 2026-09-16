@@ -7,27 +7,31 @@
 <style>
   /* ============================= DESIGN TOKENS ============================= */
   :root {
-    --color-primary: #003876;
-    --color-primary-dark: #002554;
-    --color-primary-light: #eaf1fb;
-    --color-accent: #1a5fb4;
-    --color-bg: #f4f6f9;
+    --color-primary: #0e2338;
+    --color-primary-dark: #0b1c2e;
+    --color-primary-light: #e4edf5;
+    --color-accent: #2e6da4;
+    --color-bg: #e9edf1;
     --color-surface: #ffffff;
-    --color-border: #d7dee8;
-    --color-text: #1c2530;
-    --color-text-muted: #5b6b7f;
+    --color-border: #c9d3dd;
+    --color-text: #16232f;
+    --color-text-muted: #55667a;
 
-    --color-critical: #c62828;
-    --color-critical-bg: #fdecea;
-    --color-high: #b26a00;
-    --color-high-bg: #fff4e0;
-    --color-medium: #1a5fb4;
-    --color-medium-bg: #eaf1fb;
-    --color-low: #5b6b7f;
+    --color-critical: #c31f2c;
+    --color-critical-bg: #fbe7e6;
+    --color-high: #b8720f;
+    --color-high-bg: #fdf1de;
+    --color-medium: #2e6da4;
+    --color-medium-bg: #e4edf5;
+    --color-low: #55667a;
     --color-low-bg: #eef1f5;
 
-    --color-danger: #c62828;
-    --color-success: #1e7d32;
+    --color-danger: #c31f2c;
+    --color-success: #1f7a4d;
+
+    --color-overdue-bg: #b31b23;
+    --color-overdue-border: #7c1319;
+    --color-overdue-rail: #f2c14e;
 
     --space-1: 4px;
     --space-2: 8px;
@@ -36,11 +40,12 @@
     --space-5: 24px;
     --space-6: 32px;
 
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
+    --radius-sm: 2px;
+    --radius-md: 3px;
+    --radius-lg: 4px;
 
     --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Menlo, Consolas, monospace;
   }
 
   * { box-sizing: border-box; }
@@ -50,7 +55,7 @@
     font-family: var(--font-stack);
     background: var(--color-bg);
     color: var(--color-text);
-    line-height: 1.4;
+    line-height: 1.45;
   }
 
   a, button, input, select, textarea {
@@ -71,7 +76,8 @@
   header.app-header {
     background: var(--color-primary);
     color: #fff;
-    padding: var(--space-4) var(--space-5);
+    padding: var(--space-4) var(--space-5) var(--space-5);
+    border-bottom: 3px solid var(--color-accent);
   }
 
   .header-top {
@@ -83,18 +89,19 @@
   }
 
   .wordmark {
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
     margin: 0;
   }
   .wordmark .sub {
     display: block;
     font-size: 0.7rem;
-    font-weight: 400;
-    color: #cfe0f5;
+    font-weight: 500;
+    color: #9fb9d6;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+    margin-top: 2px;
   }
 
   .btn {
@@ -114,46 +121,63 @@
   .btn-primary:hover { background: #164f96; }
 
   .btn-ghost {
-    background: transparent;
+    background: var(--color-accent);
     color: #fff;
-    border-color: rgba(255,255,255,0.6);
+    border-color: var(--color-accent);
+    font-weight: 700;
   }
-  .btn-ghost:hover { background: rgba(255,255,255,0.12); }
+  .btn-ghost:hover { background: #24597f; border-color: #24597f; }
 
   .btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
   }
 
-  /* Summary strip */
+  /* Summary strip — read like a status-board readout, not a row of chips */
   .summary-strip {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-3);
-    margin-top: var(--space-4);
+    align-items: flex-end;
+    margin-top: var(--space-5);
   }
   .summary-chip {
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.25);
-    border-radius: var(--radius-md);
-    padding: var(--space-2) var(--space-3);
-    font-size: 0.82rem;
     display: flex;
-    gap: var(--space-1);
-    align-items: baseline;
+    flex-direction: column-reverse;
+    gap: 3px;
+    padding-right: var(--space-5);
+    margin-right: var(--space-5);
+    border-right: 1px solid rgba(255,255,255,0.18);
+  }
+  .summary-chip:last-child {
+    border-right: none;
+    margin-right: 0;
+    padding-right: 0;
+  }
+  .summary-chip span {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
   }
   .summary-chip strong {
-    font-size: 1rem;
+    font-family: var(--font-mono);
+    font-size: 1.7rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
   }
-  .summary-chip.overdue {
-    background: rgba(198, 40, 40, 0.25);
-    border-color: rgba(255, 150, 150, 0.6);
+  .summary-chip.overdue strong {
+    color: #ff7a72;
+  }
+  .summary-chip.overdue span {
+    color: rgba(255, 140, 130, 0.8);
   }
 
   .memory-note {
-    margin-top: var(--space-3);
+    margin-top: var(--space-4);
     font-size: 0.78rem;
-    color: #cfe0f5;
+    color: rgba(255,255,255,0.6);
   }
 
   /* ============================= MAIN LAYOUT ============================= */
@@ -182,11 +206,9 @@
     min-width: 180px;
   }
   .filter-field label {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 600;
     color: var(--color-text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
   }
   .filter-field input,
   .filter-field select {
@@ -236,18 +258,41 @@
     align-items: center;
     justify-content: space-between;
     padding: var(--space-3) var(--space-4);
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 2px solid var(--color-border);
     font-weight: 700;
     color: var(--color-primary-dark);
   }
+  .column-header > span:first-child {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .column-header > span:first-child::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-text-muted);
+    flex: none;
+  }
+  .column[data-status="In Progress"] .column-header > span:first-child::before {
+    background: var(--color-accent);
+  }
+  .column[data-status="Blocked"] .column-header > span:first-child::before {
+    background: var(--color-critical);
+  }
+  .column[data-status="Done"] .column-header > span:first-child::before {
+    background: var(--color-success);
+  }
   .column-count {
+    font-family: var(--font-mono);
     background: var(--color-primary-light);
     color: var(--color-primary-dark);
-    border-radius: 999px;
+    border-radius: var(--radius-sm);
     padding: 1px var(--space-2);
     font-size: 0.78rem;
     font-weight: 700;
-    min-width: 22px;
+    min-width: 24px;
     text-align: center;
   }
 
@@ -269,16 +314,17 @@
     border-radius: var(--radius-md);
   }
 
-  /* Card */
+  /* Card — flat, ledger-entry style: no floating shadow, sharp corners */
   .card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-left: 5px solid var(--color-medium);
     border-radius: var(--radius-md);
     padding: var(--space-3);
-    box-shadow: 0 1px 2px rgba(20, 30, 50, 0.06);
     cursor: grab;
+    transition: border-color 0.1s ease;
   }
+  .card:hover { border-color: var(--color-accent); }
   .card:active { cursor: grabbing; }
   .card.dragging { opacity: 0.5; }
 
@@ -287,6 +333,46 @@
   .card.priority-medium { border-left-color: var(--color-medium); }
   .card.priority-low { border-left-color: var(--color-low); }
 
+  /* Overdue overrides everything else: solid alarm-red field, amber rail */
+  .card.is-overdue {
+    background: var(--color-overdue-bg);
+    border-color: var(--color-overdue-border);
+    border-left-color: var(--color-overdue-rail);
+    color: #fff;
+  }
+  .card.is-overdue:hover { border-color: var(--color-overdue-border); }
+  .card.is-overdue .card-id { color: rgba(255,255,255,0.75); }
+  .card.is-overdue .card-title { color: #fff; }
+  .card.is-overdue .card-meta { color: rgba(255,255,255,0.88); }
+  .card.is-overdue .card-actions { border-top-color: rgba(255,255,255,0.3); }
+  .card.is-overdue .move-control { color: rgba(255,255,255,0.9); }
+  .card.is-overdue .move-control select {
+    background: rgba(255,255,255,0.14);
+    color: #fff;
+    border-color: rgba(255,255,255,0.45);
+  }
+  .card.is-overdue .pill,
+  .card.is-overdue .tag,
+  .card.is-overdue .badge-overdue {
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+    border-color: rgba(255,255,255,0.45);
+  }
+  .card.is-overdue .btn-icon {
+    border-color: rgba(255,255,255,0.45);
+    color: rgba(255,255,255,0.85);
+  }
+  .card.is-overdue .btn-icon:hover {
+    background: rgba(255,255,255,0.22);
+    color: #fff;
+    border-color: #fff;
+  }
+  .card.is-overdue .delete-confirm {
+    background: rgba(255,255,255,0.94);
+    border-color: rgba(255,255,255,0.6);
+    color: var(--color-text);
+  }
+
   .card-top {
     display: flex;
     justify-content: space-between;
@@ -294,6 +380,7 @@
     gap: var(--space-2);
   }
   .card-id {
+    font-family: var(--font-mono);
     font-size: 0.7rem;
     color: var(--color-text-muted);
     font-weight: 600;
@@ -325,7 +412,7 @@
     display: inline-flex;
     align-items: center;
     gap: 3px;
-    border-radius: 999px;
+    border-radius: var(--radius-sm);
     padding: 2px var(--space-2);
     font-size: 0.7rem;
     font-weight: 700;
@@ -441,6 +528,7 @@
   .modal {
     background: var(--color-surface);
     border-radius: var(--radius-lg);
+    border-top: 4px solid var(--color-accent);
     width: 100%;
     max-width: 560px;
     padding: var(--space-5);
@@ -908,8 +996,10 @@
         "</div>"
       : "";
 
+    const overdueClass = isOverdue(task) ? " is-overdue" : "";
+
     return (
-      '<article class="card ' + priorityClass(task.priority) + '" draggable="true" data-id="' + escapeHtml(task.id) + '">' +
+      '<article class="card ' + priorityClass(task.priority) + overdueClass + '" draggable="true" data-id="' + escapeHtml(task.id) + '">' +
         '<div class="card-top">' +
           '<span class="card-id">' + escapeHtml(task.id) + "</span>" +
           '<button type="button" class="btn-icon" aria-label="Delete task ' + escapeHtml(task.id) + '" data-action="delete" data-id="' + escapeHtml(task.id) + '">✕</button>' +

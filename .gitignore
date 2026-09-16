@@ -1,5 +1,9 @@
-# Claude Code local config (may contain machine-specific settings/tokens)
+# Claude Code local config/tooling (may contain machine-specific settings/tokens)
 .claude/
+.agents/
+.mcp.json
+skills-lock.json
+.playwright-mcp/
 
 # Environment/secrets
 .env
